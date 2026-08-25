@@ -1,0 +1,78 @@
+# DevCorp AI — Dynamic LLM Provider Registry
+# Add or toggle providers here without modifying any code.
+
+providers:
+  # Primary Cloud Tier (Ultra-Long Context / Deep Reasoning)
+  - name: "gemini-2.5-pro"
+    model_id: "gemini/gemini-2.5-pro"
+    endpoint: null
+    auth_type: "api_key"
+    auth_env_var: "GEMINI_API_KEY"
+    tier: "primary"
+    capabilities: ["reasoning", "coding", "multimodal"]
+    enabled: true
+    max_context_tokens: 1000000
+    cost_per_1k_input: 0.00125
+    cost_per_1k_output: 0.005
+
+  - name: "claude-sonnet-4"
+    model_id: "claude-sonnet-4-20250514"
+    endpoint: null
+    auth_type: "api_key"
+    auth_env_var: "ANTHROPIC_API_KEY"
+    tier: "primary"
+    capabilities: ["reasoning", "coding"]
+    enabled: true
+    max_context_tokens: 200000
+    cost_per_1k_input: 0.003
+    cost_per_1k_output: 0.015
+
+  - name: "gpt-4o"
+    model_id: "openai/gpt-4o"
+    endpoint: null
+    auth_type: "api_key"
+    auth_env_var: "OPENAI_API_KEY"
+    tier: "primary"
+    capabilities: ["reasoning", "coding", "multimodal"]
+    enabled: true
+    max_context_tokens: 128000
+    cost_per_1k_input: 0.005
+    cost_per_1k_output: 0.015
+
+  # Secondary Burst Cloud Tier (High Throughput / Cost Optimized)
+  - name: "groq-llama-3.3-70b"
+    model_id: "groq/llama-3.3-70b-versatile"
+    endpoint: null
+    auth_type: "api_key"
+    auth_env_var: "GROQ_API_KEY"
+    tier: "secondary"
+    capabilities: ["reasoning", "coding"]
+    enabled: true
+    max_context_tokens: 128000
+    cost_per_1k_input: 0.00059
+    cost_per_1k_output: 0.00079
+
+  - name: "deepseek-coder-v3"
+    model_id: "deepseek/deepseek-coder"
+    endpoint: "https://api.deepseek.com"
+    auth_type: "api_key"
+    auth_env_var: "DEEPSEEK_API_KEY"
+    tier: "secondary"
+    capabilities: ["coding"]
+    enabled: true
+    max_context_tokens: 128000
+    cost_per_1k_input: 0.00014
+    cost_per_1k_output: 0.00028
+
+  # Tertiary / Local Tier (Zero-Cost Local Fallback - Set enabled: true when GPU available)
+  - name: "local-qwen-coder-32b"
+    model_id: "openai/qwen2.5-coder-32b"
+    endpoint: "http://localhost:8000/v1"
+    auth_type: "none"
+    auth_env_var: null
+    tier: "local"
+    capabilities: ["coding", "reasoning"]
+    enabled: false
+    max_context_tokens: 32768
+    cost_per_1k_input: 0.0
+    cost_per_1k_output: 0.0

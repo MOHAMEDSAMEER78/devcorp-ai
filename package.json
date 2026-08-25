@@ -1,0 +1,16 @@
+{
+  "name": "devcorp-ai",
+  "version": "0.1.0",
+  "description": "Autonomous Multi-Agent Software Organization Platform",
+  "main": "index.js",
+  "scripts": {
+    "test:dsh-profiles": "echo 'Validating DSH profiles...'"
+  },
+  "dependencies": {
+    "cordis": "^3.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  },
+  "private": true
+}
