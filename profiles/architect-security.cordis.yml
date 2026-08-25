@@ -1,0 +1,30 @@
+name: "architect-security"
+version: "1.0.0"
+description: "Tier 2 Security Architect: STRIDE threat modeling, auth flow specs, and encryption policies"
+
+plugins:
+  - name: "dsh-model-litellm"
+    config:
+      endpoint: "http://litellm-proxy:4000/v1"
+      model: "primary/reasoning"
+      api_key: "${LITELLM_MASTER_KEY}"
+      temperature: 0.1
+
+  - name: "dsh-a2a"
+    config:
+      server: true
+      port: 8086
+      card:
+        name: "security-architect-agent"
+        description: "Formulates threat models, auth flow specs, and security compliance matrices"
+        skills:
+          - id: "design-security-specification"
+            name: "Security Specification Design"
+            inputModes: ["application/json"]
+            outputModes: ["application/json"]
+
+  - name: "dsh-trajectory"
+    config:
+      output_dir: "/trajectories/architect-security"
+      format: "jsonl"
+      record_tokens: true

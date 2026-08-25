@@ -99,3 +99,34 @@ All development sessions, architectural decisions, modifications, and milestones
 6. **Automated Verification**:
    - `tests/unit/test_orchestrator.py`: Full graph execution to standup gate, checkpoint resumption with executive steering feedback, and circuit breaker verification.
    - **Verification Result**: 17/17 tests passing cleanly with 0 warnings.
+
+---
+
+## [2026-08-25] Phase 2 & Phase 3 — Inference Gateway, DSH Runtime Profiles & MCP Servers
+
+### Objectives Achieved
+1. **Inference Gateway & Resilience Tier (Phase 2)**:
+   - `packages/gateway/budgets.py`: Implemented granular per-role spend tracker and alert manager across all 13 roles (`NORMAL`, `SOFT_ALERT_80`, `CRITICAL_ALERT_95`, `HARD_HALT_100`).
+   - `packages/gateway/circuit_breaker.py`: Implemented 3-state circuit breaker (`CLOSED`, `OPEN`, `HALF_OPEN`) with cooldown probing to protect the swarm from upstream provider rate limits (429) or outages.
+   - `packages/gateway/litellm_config_generator.py`: Compiled provider registry into dynamic LiteLLM YAML configurations with cascading fallback chains.
+2. **DSH Agent Runtime Profiles (Phase 3)**:
+   - Created all 13 declarative Cordis profiles in `profiles/*.cordis.yml`:
+     - *Tier 1*: `product-manager.cordis.yml`
+     - *Tier 2 (Architects)*: `architect-requirements.cordis.yml`, `architect-system.cordis.yml`, `architect-data.cordis.yml`, `architect-ux.cordis.yml`, `architect-security.cordis.yml`
+     - *Tier 2/3*: `agent-router.cordis.yml`
+     - *Tier 3*: `engineering-manager.cordis.yml`
+     - *Tier 4 (Engineers)*: `engineer-backend.cordis.yml`, `engineer-frontend.cordis.yml`, `engineer-ux.cordis.yml`
+     - *Tier 5*: `qa-reviewer.cordis.yml`
+     - *Tier 6*: `demo-release.cordis.yml`
+3. **Model Context Protocol (MCP) Tool Servers**:
+   - `packages/mcp_servers/filesystem_server.py`: `read_file`, `write_file`, `list_dir`, `search_files`.
+   - `packages/mcp_servers/git_server.py`: `git_status`, `git_diff`, `git_commit`, `git_log`.
+   - `packages/mcp_servers/terminal_server.py`: `run_command` in sandboxed bash.
+   - `packages/mcp_servers/test_runner_server.py`: `run_tests`.
+4. **Sandboxed Virtualization**:
+   - `infra/docker/sandbox-agent.Dockerfile`: Ubuntu 24.04 container pre-configured with Python 3.12, Node.js 20, Git, and test frameworks for isolated execution.
+5. **Automated Verification**:
+   - `tests/unit/test_gateway.py`: Verified budget thresholds and circuit breaker state transitions.
+   - `tests/unit/test_dsh_profiles.py`: Verified schema adherence and plugin configurations for all 13 DSH Cordis YAML profiles.
+   - `tests/unit/test_mcp_servers.py`: Verified tool execution across all MCP servers.
+   - **Verification Result**: 37/37 tests passing cleanly.

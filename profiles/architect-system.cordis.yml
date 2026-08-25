@@ -1,0 +1,30 @@
+name: "architect-system"
+version: "1.0.0"
+description: "Tier 2 System Architect: System topology, OpenAPI 3.1 contracts, and sequence diagrams"
+
+plugins:
+  - name: "dsh-model-litellm"
+    config:
+      endpoint: "http://litellm-proxy:4000/v1"
+      model: "primary/reasoning"
+      api_key: "${LITELLM_MASTER_KEY}"
+      temperature: 0.1
+
+  - name: "dsh-a2a"
+    config:
+      server: true
+      port: 8083
+      card:
+        name: "system-architect-agent"
+        description: "Designs system architecture, service topology, and OpenAPI specifications"
+        skills:
+          - id: "design-system-architecture"
+            name: "System Architecture Design"
+            inputModes: ["application/json"]
+            outputModes: ["application/json"]
+
+  - name: "dsh-trajectory"
+    config:
+      output_dir: "/trajectories/architect-system"
+      format: "jsonl"
+      record_tokens: true

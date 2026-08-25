@@ -1,0 +1,30 @@
+name: "product-manager"
+version: "1.0.0"
+description: "Tier 1 Product Manager Agent: Ingests executive vision and produces structured PRDs"
+
+plugins:
+  - name: "dsh-model-litellm"
+    config:
+      endpoint: "http://litellm-proxy:4000/v1"
+      model: "primary/reasoning"
+      api_key: "${LITELLM_MASTER_KEY}"
+      temperature: 0.2
+
+  - name: "dsh-a2a"
+    config:
+      server: true
+      port: 8081
+      card:
+        name: "product-manager-agent"
+        description: "Synthesizes PRDs and delta change documents"
+        skills:
+          - id: "synthesize-prd"
+            name: "PRD Synthesis"
+            inputModes: ["application/json"]
+            outputModes: ["application/json"]
+
+  - name: "dsh-trajectory"
+    config:
+      output_dir: "/trajectories/product-manager"
+      format: "jsonl"
+      record_tokens: true

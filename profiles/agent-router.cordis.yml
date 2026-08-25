@@ -1,0 +1,30 @@
+name: "agent-router"
+version: "1.0.0"
+description: "Tier 2/3 Agent Router: Classifies tickets and dispatches tasks to specialist agents"
+
+plugins:
+  - name: "dsh-model-litellm"
+    config:
+      endpoint: "http://litellm-proxy:4000/v1"
+      model: "secondary/burst"
+      api_key: "${LITELLM_MASTER_KEY}"
+      temperature: 0.0
+
+  - name: "dsh-a2a"
+    config:
+      server: true
+      port: 8087
+      card:
+        name: "agent-router-agent"
+        description: "Classifies ticket domains and routes tasks"
+        skills:
+          - id: "route-task"
+            name: "Task Routing"
+            inputModes: ["application/json"]
+            outputModes: ["application/json"]
+
+  - name: "dsh-trajectory"
+    config:
+      output_dir: "/trajectories/agent-router"
+      format: "jsonl"
+      record_tokens: true

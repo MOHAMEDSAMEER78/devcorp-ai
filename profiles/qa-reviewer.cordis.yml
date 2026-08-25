@@ -1,0 +1,56 @@
+name: "qa-reviewer"
+version: "1.0.0"
+description: "Tier 5 QA Reviewer: Static analysis, regression suites, and security benchmarks"
+
+plugins:
+  - name: "dsh-model-litellm"
+    config:
+      endpoint: "http://litellm-proxy:4000/v1"
+      model: "primary/reasoning"
+      api_key: "${LITELLM_MASTER_KEY}"
+      temperature: 0.0
+
+  - name: "dsh-mcp"
+    config:
+      servers:
+        - name: "filesystem"
+          transport: "stdio"
+          command: "python3"
+          args: ["-m", "packages.mcp_servers.filesystem_server", "--root", "/workspace"]
+        - name: "git"
+          transport: "stdio"
+          command: "python3"
+          args: ["-m", "packages.mcp_servers.git_server"]
+        - name: "terminal"
+          transport: "stdio"
+          command: "python3"
+          args: ["-m", "packages.mcp_servers.terminal_server"]
+        - name: "test-runner"
+          transport: "stdio"
+          command: "python3"
+          args: ["-m", "packages.mcp_servers.test_runner_server"]
+
+  - name: "dsh-a2a"
+    config:
+      server: true
+      port: 8092
+      card:
+        name: "qa-reviewer-agent"
+        description: "Executes test suites, static analysis, and code reviews"
+        skills:
+          - id: "review-pull-request"
+            name: "Pull Request Review"
+            inputModes: ["application/json"]
+            outputModes: ["application/json"]
+
+  - name: "dsh-sandbox"
+    config:
+      mode: "standard"
+      image: "devcorp/agent-sandbox:latest"
+      timeout_seconds: 1800
+
+  - name: "dsh-trajectory"
+    config:
+      output_dir: "/trajectories/qa-reviewer"
+      format: "jsonl"
+      record_tokens: true

@@ -1,0 +1,30 @@
+name: "architect-requirements"
+version: "1.0.0"
+description: "Tier 2 Requirements Architect: Formalizes PRD into testable contracts and SLAs"
+
+plugins:
+  - name: "dsh-model-litellm"
+    config:
+      endpoint: "http://litellm-proxy:4000/v1"
+      model: "primary/reasoning"
+      api_key: "${LITELLM_MASTER_KEY}"
+      temperature: 0.1
+
+  - name: "dsh-a2a"
+    config:
+      server: true
+      port: 8082
+      card:
+        name: "requirements-architect-agent"
+        description: "Produces formal requirements contracts, SLAs, and edge case matrix"
+        skills:
+          - id: "formalize-contract"
+            name: "Requirements Contract Formulation"
+            inputModes: ["application/json"]
+            outputModes: ["application/json"]
+
+  - name: "dsh-trajectory"
+    config:
+      output_dir: "/trajectories/architect-requirements"
+      format: "jsonl"
+      record_tokens: true

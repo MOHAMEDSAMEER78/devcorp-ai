@@ -1,0 +1,30 @@
+name: "architect-ux"
+version: "1.0.0"
+description: "Tier 2 UX Architect: Information architecture, JSON wireframes, and design token systems"
+
+plugins:
+  - name: "dsh-model-litellm"
+    config:
+      endpoint: "http://litellm-proxy:4000/v1"
+      model: "primary/reasoning"
+      api_key: "${LITELLM_MASTER_KEY}"
+      temperature: 0.2
+
+  - name: "dsh-a2a"
+    config:
+      server: true
+      port: 8085
+      card:
+        name: "ux-architect-agent"
+        description: "Generates wireframes and design token specifications"
+        skills:
+          - id: "design-ux-specification"
+            name: "UX Specification Design"
+            inputModes: ["application/json"]
+            outputModes: ["application/json"]
+
+  - name: "dsh-trajectory"
+    config:
+      output_dir: "/trajectories/architect-ux"
+      format: "jsonl"
+      record_tokens: true

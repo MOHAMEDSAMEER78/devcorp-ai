@@ -1,0 +1,56 @@
+name: "engineer-backend"
+version: "1.0.0"
+description: "Tier 4 Backend Engineer: REST APIs, database queries, ORMs, and scraping pipelines"
+
+plugins:
+  - name: "dsh-model-litellm"
+    config:
+      endpoint: "http://litellm-proxy:4000/v1"
+      model: "primary/reasoning"
+      api_key: "${LITELLM_MASTER_KEY}"
+      temperature: 0.1
+
+  - name: "dsh-mcp"
+    config:
+      servers:
+        - name: "filesystem"
+          transport: "stdio"
+          command: "python3"
+          args: ["-m", "packages.mcp_servers.filesystem_server", "--root", "/workspace"]
+        - name: "git"
+          transport: "stdio"
+          command: "python3"
+          args: ["-m", "packages.mcp_servers.git_server"]
+        - name: "terminal"
+          transport: "stdio"
+          command: "python3"
+          args: ["-m", "packages.mcp_servers.terminal_server"]
+        - name: "test-runner"
+          transport: "stdio"
+          command: "python3"
+          args: ["-m", "packages.mcp_servers.test_runner_server"]
+
+  - name: "dsh-a2a"
+    config:
+      server: true
+      port: 8089
+      card:
+        name: "backend-engineer-agent"
+        description: "Implements backend APIs, database models, and parsing engines"
+        skills:
+          - id: "implement-backend-ticket"
+            name: "Backend Implementation"
+            inputModes: ["application/json"]
+            outputModes: ["application/json", "text/plain"]
+
+  - name: "dsh-sandbox"
+    config:
+      mode: "standard"
+      image: "devcorp/agent-sandbox:latest"
+      timeout_seconds: 1800
+
+  - name: "dsh-trajectory"
+    config:
+      output_dir: "/trajectories/backend-engineer"
+      format: "jsonl"
+      record_tokens: true

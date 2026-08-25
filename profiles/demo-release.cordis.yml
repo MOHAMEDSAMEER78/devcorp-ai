@@ -1,0 +1,38 @@
+name: "demo-release"
+version: "1.0.0"
+description: "Tier 6 Demo & Release Agent: Playwright headless journey recording with visible cursor overlays"
+
+plugins:
+  - name: "dsh-model-litellm"
+    config:
+      endpoint: "http://litellm-proxy:4000/v1"
+      model: "secondary/burst"
+      api_key: "${LITELLM_MASTER_KEY}"
+      temperature: 0.1
+
+  - name: "dsh-mcp"
+    config:
+      servers:
+        - name: "terminal"
+          transport: "stdio"
+          command: "python3"
+          args: ["-m", "packages.mcp_servers.terminal_server"]
+
+  - name: "dsh-a2a"
+    config:
+      server: true
+      port: 8093
+      card:
+        name: "demo-release-agent"
+        description: "Executes Playwright journeys and exports MP4 demo recordings"
+        skills:
+          - id: "record-demo-walkthrough"
+            name: "Demo Walkthrough Recording"
+            inputModes: ["application/json"]
+            outputModes: ["application/json"]
+
+  - name: "dsh-trajectory"
+    config:
+      output_dir: "/trajectories/demo-release"
+      format: "jsonl"
+      record_tokens: true

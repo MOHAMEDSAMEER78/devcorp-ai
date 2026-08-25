@@ -1,0 +1,30 @@
+name: "architect-data"
+version: "1.0.0"
+description: "Tier 2 Data Architect: Relational models, SQL migrations, ER diagrams, and caching rules"
+
+plugins:
+  - name: "dsh-model-litellm"
+    config:
+      endpoint: "http://litellm-proxy:4000/v1"
+      model: "primary/reasoning"
+      api_key: "${LITELLM_MASTER_KEY}"
+      temperature: 0.1
+
+  - name: "dsh-a2a"
+    config:
+      server: true
+      port: 8084
+      card:
+        name: "data-architect-agent"
+        description: "Designs data schemas, ER models, and SQL migration scripts"
+        skills:
+          - id: "design-data-architecture"
+            name: "Data Architecture Design"
+            inputModes: ["application/json"]
+            outputModes: ["application/json"]
+
+  - name: "dsh-trajectory"
+    config:
+      output_dir: "/trajectories/architect-data"
+      format: "jsonl"
+      record_tokens: true
