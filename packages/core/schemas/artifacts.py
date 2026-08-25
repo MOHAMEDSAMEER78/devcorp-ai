@@ -1,6 +1,6 @@
 """Artifact Bundle, Sprint Report, and Delta Document Schemas."""
 from typing import List, Dict, Any, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 from pydantic import BaseModel, Field
 
 
@@ -16,7 +16,7 @@ class ArtifactBundle(BaseModel):
     """Deliverable bundle packaged by Demo Agent or Engineering Agents."""
     bundle_id: str = Field(...)
     sprint_id: str = Field(...)
-    created_at: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     items: List[ArtifactItem] = Field(default_factory=list)
     manifest: Dict[str, Any] = Field(default_factory=dict)
 
