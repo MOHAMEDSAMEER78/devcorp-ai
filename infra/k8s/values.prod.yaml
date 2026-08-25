@@ -1,0 +1,28 @@
+# DevCorp AI Production Helm Values
+environment: production
+
+orchestrator:
+  replicaCount: 1
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+    requests:
+      cpu: 500m
+      memory: 1Gi
+
+gateway:
+  replicaCount: 3
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 75
+
+dashboard:
+  replicaCount: 3
+  ingress:
+    enabled: true
+    host: standup.devcorp.ai
+    tls: true
+    secretName: devcorp-standup-tls

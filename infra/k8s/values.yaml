@@ -1,0 +1,47 @@
+# DevCorp AI Default Helm Values
+environment: staging
+
+orchestrator:
+  replicaCount: 1
+  image:
+    repository: devcorp/orchestrator
+    tag: latest
+    pullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+
+gateway:
+  replicaCount: 2
+  image:
+    repository: ghcr.io/berriai/litellm
+    tag: main-latest
+  port: 4000
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+
+dashboard:
+  replicaCount: 2
+  image:
+    repository: devcorp/dashboard
+    tag: latest
+  port: 3000
+  ingress:
+    enabled: true
+    host: standup.devcorp.internal
+    tls: false
+
+postgres:
+  storageSize: 20Gi
+
+redis:
+  storageSize: 5Gi
