@@ -301,7 +301,7 @@ async def serve_dashboard():
         <header>
             <div>
                 <h1>🏢 DevCorp AI</h1>
-                <div class="subtitle">Autonomous Multi-Agent Software Organization — 13 Specialist Swarm</div>
+                <div class="subtitle">Autonomous Multi-Agent Software Organization — 13 Specialist Swarm</div><div style="margin-top:6px;"><a href="/shop/" style="background:#22c55e;color:#0f172a;font-weight:bold;padding:6px 14px;border-radius:4px;text-decoration:none;font-size:0.85rem;">🛍️ Open Built Product (Fancy Shop App) →</a></div>
             </div>
             <div style="display: flex; align-items: center;">
                 <span class="pulse"></span>
@@ -430,3 +430,11 @@ async def serve_dashboard():
 </body>
 </html>
 """
+
+# Mount the Generated Target Application
+try:
+    from workspace.fancy_shop_inventory.api.main import app as shop_app
+    app.mount("/app", shop_app)
+    app.mount("/shop", shop_app)
+except Exception as e:
+    pass
