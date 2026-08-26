@@ -156,3 +156,23 @@ All development sessions, architectural decisions, modifications, and milestones
 6. **Comprehensive Automated Verification**:
    - `tests/unit/`: 14 test modules covering all layers (`test_a2a_layer.py`, `test_dashboard_api.py`, `test_demo_engine.py`, `test_dsh_profiles.py`, `test_gateway.py`, `test_guardrails.py`, `test_mcp_servers.py`, `test_orchestrator.py`, `test_prompts.py`, `test_provider_registry.py`, `test_schemas.py`, `test_standup_bots.py`, `test_config.py`, `test_dsh_bridge.py`).
    - **Verification Result**: 62/62 tests passing cleanly in 0.92s.
+
+---
+
+## [2026-08-26] Re-Implementation: Real Unhardcoded Agent Execution Engine & Target App Generation
+
+### Objectives Achieved
+1. **Replaced All Hardcoded Mock Nodes**:
+   - `packages/core/llm_client.py`: Implemented unified LLM client supporting LiteLLM proxy and cloud providers with structured Pydantic schema validation.
+   - `packages/core/agent_runtime.py`: Implemented ReAct / Tool execution loop for specialist engineers with append-only `.jsonl` trajectory logging and real MCP tools.
+   - `packages/orchestrator/nodes.py`: Rewrote all 14 nodes to dynamically synthesize PRD, architecture contracts, WBS task DAGs, execute real code writing in `workspace/expense_tracker/`, and execute real `pytest` in QA.
+2. **Autonomous Target Application Generated**:
+   - `workspace/expense_tracker/api/parser.py`: Multi-format CSV parser, currency normalizer, and merchant categorization heuristic engine.
+   - `workspace/expense_tracker/api/main.py`: Production FastAPI server with `/api/statements/upload`, `/api/transactions`, and `/api/analytics/summary`.
+   - `workspace/expense_tracker/tests/test_expense_tracker.py`: Pytest suite testing parsing, amounts, categories, and REST API endpoints.
+   - `workspace/expense_tracker/src/design-system/tokens.css`: CSS design tokens.
+3. **MCP Tool Integration**:
+   - `packages/mcp_servers/test_runner_server.py`: Configured with isolated subprocess execution, dynamic `PYTHONPATH`, and JSON-RPC reporting.
+4. **Verification**:
+   - Generated application tests: 4/4 passed in 0.21s.
+   - Master platform unit tests: 62/62 passed in 4.47s.

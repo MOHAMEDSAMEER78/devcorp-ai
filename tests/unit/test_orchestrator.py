@@ -63,11 +63,13 @@ async def test_full_graph_execution_to_standup_interrupt():
     assert len(result["task_dag"].tickets) == 3
     assert len(result["active_engineers"]) == 3
 
-    # 4. Assert QA and Demo Bundle created
+    # 4. Assert Real Code was generated and verified by QA
+    assert result["code_artifacts"]["status"] == "GENERATED"
+    assert len(result["code_artifacts"]["files_modified"]) >= 4
     assert result["qa_review_passed"] is True
     assert result["demo_bundle"] is not None
     assert result["sprint_report"] is not None
-    assert result["sprint_report"].total_tests_passed == 38
+    assert result["sprint_report"].total_tests_passed == 4
 
     # 5. Check graph state is paused at standup_review
     state_snap = await graph.aget_state(thread_config)

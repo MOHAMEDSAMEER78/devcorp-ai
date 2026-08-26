@@ -1,0 +1,11 @@
+/* DevCorp AI Design Tokens */
+:root {
+  --color-bg: #0f172a;
+  --color-card: #1e293b;
+  --color-primary: #38bdf8;
+  --color-income: #22c55e;
+  --color-expense: #ef4444;
+  --color-text: #f8fafc;
+  --radius-md: 8px;
+  --spacing-md: 16px;
+}
