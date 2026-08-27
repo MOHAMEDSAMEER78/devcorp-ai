@@ -9,15 +9,23 @@ from typing import Dict, Any
 
 class TestRunnerServer:
     def run_tests(self, test_path: str = "tests") -> Dict[str, Any]:
-        p = Path(test_path)
-        # Determine parent directory for PYTHONPATH
-        if "workspace/expense_tracker" in test_path:
-            python_path = str(Path("workspace/expense_tracker").resolve())
+        p = Path(test_path).resolve()
+        
+        # Dynamically determine root module directory for PYTHONPATH
+        if p.name == "tests":
+            python_path = str(p.parent)
+        elif "workspace" in str(p):
+            parts = list(p.parts)
+            idx = parts.index("workspace")
+            if idx + 1 < len(parts):
+                python_path = str(Path(*parts[:idx+2]))
+            else:
+                python_path = str(p)
         else:
             python_path = str(Path(".").resolve())
 
         env = os.environ.copy()
-        env["PYTHONPATH"] = f"{python_path}:{env.get('PYTHONPATH', '')}"
+        env["PYTHONPATH"] = f"{python_path}:{str(Path('.').resolve())}:{env.get('PYTHONPATH', '')}"
 
         cmd = [sys.executable, "-m", "pytest", test_path, "-v"]
         proc = subprocess.run(cmd, env=env, capture_output=True, text=True)
